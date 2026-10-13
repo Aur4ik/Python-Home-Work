@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bookspace — каталог книг</title>
+<style>
+* {box-sizing: border-box} body {margin: 0; background: #f2eee7; color: #26352f; font-family: Arial, sans-serif}
+main {max-width: 1120px; margin: 60px auto; padding: 0 24px} h1 {font-size: 48px; margin: 12px 0}
+.subtitle {color: #66736a; line-height: 1.6} form {display:flex; gap:12px; margin:32px 0}
+input {flex:1; min-width:0; padding:14px; border:1px solid #b8c2b7; border-radius:8px; font:inherit}
+button {background:#263f33; color:white; border:0; border-radius:8px; padding:14px 24px; cursor:pointer}
+.grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px}
+article {background:#fffdf8; padding:24px; border:1px solid #d7ddd2; border-radius:12px}
+article h2 {font-size:21px; line-height:1.4; margin-top:0} article p {line-height:1.6}
+.tag {font-size:12px; letter-spacing:2px} .error {background:#ffe9dc; padding:16px; border-radius:8px}
+footer {margin-top:32px; color:#66736a; font-size:14px}
+</style>
+</head>
+<body><main>
+<span class="tag">ОТКРОЙТЕ СЛЕДУЮЩУЮ ИСТОРИЮ</span>
+<h1>Bookspace</h1><p class="subtitle">Каталог книг из Open Library. Найдите книгу по названию или автору.</p>
+<form method="get"><input name="q" value="{{ query }}" maxlength="100" aria-label="Название книги или автор"><button type="submit">Найти</button></form>
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% else %}
+<section class="grid">
+{% for book in books %}
+<article><h2>{{ book.title }}</h2><p>{{ book.authors }}</p>
+<p>Первое издание: <strong>{{ book.year|default_if_none:"Не указан" }}</strong><br>Количество изданий: {{ book.editions }}</p></article>
+{% empty %}<p>Книги не найдены. Попробуйте другой запрос.</p>{% endfor %}
+</section>{% endif %}
+<footer>Источник данных: <a href="https://openlibrary.org">Open Library</a></footer>
+</main></body></html>
